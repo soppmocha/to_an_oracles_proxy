@@ -169,7 +169,7 @@
             clickable = false;
 
             const {
-                revealSpeed = 0.01,
+                revealSpeed = (gotPres) ? 0.1 : 0.03,
                 scrambleChars = "QWERTYUIOPASDFGHJKLZXCVBNMqwertyuiopasdfghjklzxcvbnm",
                 blockChar = "█",
                 blockChance = 0.2,
