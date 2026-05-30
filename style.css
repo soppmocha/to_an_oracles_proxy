@@ -1,0 +1,100 @@
+@import url('https://cdn.jsdelivr.net/npm/galmuri/dist/galmuri.css');
+
+#prescriptMessenger {
+    display: none;
+}
+
+body {
+    background-color: black;
+    color: #f0f8ff;
+    text-rendering: optimizeSpeed;
+}
+
+main {
+    font-family: Galmuri14, Helvetica, sans-serif;
+    font-size: 15px;
+    margin-left: auto;
+    margin-right: auto;
+    width: 650px;
+}
+
+
+.paperSlip {
+    text-align: left;
+}
+
+
+form {
+    font-family: Galmuri14, Helvetica, sans-serif;
+    font-size: 15px;
+    padding: 15px;
+    
+}
+
+input[type=text] {
+    margin: 10px;
+    margin-left: 0px;
+    background-color: black;
+    color: aliceblue;
+    border: 1px solid aliceblue;
+    font-family: Galmuri14, Helvetica, sans-serif;
+    font-size: 15px;
+    padding: 4px;
+}
+
+input[type=submit], button {
+    font-family: Galmuri14, Helvetica, sans-serif;
+    font-size: 15px;
+    background-color: black;
+    color: #96c4ec;
+    border: 1px solid #96c4ec;
+    padding: 4px;
+    margin: 10px;
+    margin-left: 0px;
+}
+
+input[type=submit]:hover, button:hover {
+    color: #f0f8ff;
+    border: 1px solid #f0f8ff;
+}
+
+hr {
+    border-bottom-width: 0px;
+}
+
+footer {
+    font-size: 8px;
+    font-family: Galmuri7, Helvetica, sans-serif;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+}
+
+footer button {
+    font-size: 8px;
+    font-family: Galmuri7, Helvetica, sans-serif;
+    margin: initial;
+}
+
+a {
+    color: #96c4ec;
+}
+
+@media screen and (max-width: 1250px) {
+    main {
+        width: 90vw;
+        font-size: 30px;
+    }
+
+    input[type=submit], button {
+        font-size: 30px;
+    }
+
+    input[type=text], form {
+        width: 80vw;
+        font-size: 30px;
+    }
+
+    footer, footer button {
+        font-size: 16px;
+    }
+}

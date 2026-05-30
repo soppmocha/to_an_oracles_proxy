@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>신탁 대행자님께.</title>
+    <link rel="icon" href="./favicon.ico" type="image/x-icon">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/howler/2.2.4/howler.min.js"></script>
+
+    <style>
+        @font-face {
+            font-family: 'webfont';
+            font-style: normal;
+            font-weight: normal;
+            src: url('./webfont.woff2') format('woff2');
+        }
+
+        html,
+        body {
+            margin: 0;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        body {
+            background-image: url("black.png");
+            background-color: black;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            gap: 20px;
+        }
+
+        #maintext {
+            font-family: 'webfont', sans-serif;
+            cursor: pointer;
+            letter-spacing: 2px;
+            user-select: none;
+            width: 90%;
+            max-width: 800px;
+            box-sizing: border-box;
+            text-align: center;
+            display: inline-block;
+            font-size: 16px;
+            color: #ffffff;
+            line-height: 22px;
+
+            /* 초강력 파란색 네온 이펙트 */
+            text-shadow:
+                0 0 4px #ffffff,
+                0 0 10px #00d2ff,
+                0 0 20px #0044ff,
+                0 0 35px #0044ff,
+                0 0 55px #0044ff,
+                0 0 85px #0044ff,
+                0 0 120px #0044ff,
+                0 0 160px #0044ff;
+
+            transition: opacity 0.3s, text-shadow 0.3s, background-color 0.3s;
+            padding: 40px 20px;
+            border-radius: 8px;
+        }
+
+        #maintext:hover {
+            /* background-color: rgba(0, 68, 255, 0.05); */
+            text-shadow:
+                0 0 6px #ffffff,
+                0 0 15px #00d2ff,
+                0 0 30px #0044ff,
+                0 0 50px #0044ff,
+                0 0 80px #0044ff,
+                0 0 110px #0044ff,
+                0 0 15px #0044ff,
+                0 0 200px #0044ff;
+        }
+
+        .neon-image {
+            display: block;
+            margin: 0 auto;
+            width: 219px;
+            height: 260px;
+            position: relative;
+
+            /* 이미지 윤곽을 따라 푸른 잔광이 은은하게 번지는 효과 */
+            filter: drop-shadow(0 0 15px rgba(0, 140, 255, 0.45)) drop-shadow(0 0 40px rgba(0, 68, 255, 0.25));
+
+            /* 약간의 미래지향적인 숨쉬기 애니메이션 (선택사항, 원치 않으면 삭제 가능) */
+            animation: neonPulse 4s ease-in-out infinite alternate;
+        }
+    </style>
+</head>
+
+<body>
+    <img class="neon-image" style="display:block;margin:0 auto;width:219px;height:260px;position:relative;"
+        src="./index.png" alt="Main Graphic">
+    <div id="maintext">— 새로운 지령이 있습니다. —</div>
+
+    <script id="주기능">
+        // --- [전역 변수 설정] ---
+        let __audioUnlocked = false;
+        let gotPres = false;
+        let clickable = true;
+
+        // --- [2. 오디오 객체 정의] ---
+        const scriptingSound = new Howl({
+            src: ["scripting.wav"],
+            volume: 0.25,
+            preload: true,
+        });
+
+        const beepep = new Howl({
+            src: ["beepep.wav"],
+            volume: 0.35,
+            preload: true,
+        });
+
+        const clankSound = new Howl({
+            src: ["clank.wav"],
+            volume: 0.4,
+            preload: true,
+        });
+
+        // --- [3. 브라우저 오디오 제한 해제 함수] ---
+        async function unlockHowlerFromGesture() {
+            if (__audioUnlocked) return;
+            if (Howler.ctx && Howler.ctx.state === "suspended") {
+                await Howler.ctx.resume();
+            }
+            scriptingSound.play();
+            scriptingSound.stop();
+            __audioUnlocked = true;
+        }
+
+        // 연달아 재생해 주는 오디오 콤보 함수
+        function 플레이어지령오디오() {
+            scriptingSound.stop();
+            beepep.stop();
+            scriptingSound.play();
+
+            scriptingSound.once('end', () => {
+                let 재생횟수 = 0;
+                let 최대재생 = 8;
+                if (gotPres) {
+                    최대재생 = 4;
+                }
+
+                const 오디오타이머 = setInterval(() => {
+                    if (재생횟수 < 최대재생) {
+                        beepep.stop();
+                        beepep.play();
+                        재생횟수++;
+                    } else {
+                        clearInterval(오디오타이머);
+                        if (!gotPres) {
+                            gotPres = true
+                            clickable = true;
+                        }
+                    }
+                }, 110);
+            });
+        }
+
+        // --- [4. 스크램블 텍스트 효과 함수] ---
+        function revealText(el, fromText, finalText, options = {}, callback = null) {
+            clickable = false;
+
+            const {
+                revealSpeed = 0.01,
+                scrambleChars = "QWERTYUIOPASDFGHJKLZXCVBNMqwertyuiopasdfghjklzxcvbnm",
+                blockChar = "█",
+                blockChance = 0.2,
+                fps = 59
+            } = options;
+
+            if (el.__revealTimer) {
+                clearInterval(el.__revealTimer);
+                el.__revealTimer = null;
+            }
+
+            const len = Math.max(fromText.length, finalText.length);
+            let progress = 0;
+
+            function randomChar() {
+                return Math.random() < blockChance ? blockChar : scrambleChars[Math.floor(Math.random() * scrambleChars.length)];
+            }
+
+            el.__revealTimer = setInterval(() => {
+                progress += revealSpeed * len;
+                let out = "";
+
+                for (let i = 0; i < len; i++) {
+                    const targetChar = finalText[i] ?? "";
+                    const fromChar = fromText[i] ?? "";
+
+                    if (i < progress) {
+                        out += targetChar;
+                    } else {
+                        if (targetChar === " " || fromChar === " ") out += " ";
+                        else out += randomChar();
+                    }
+                }
+
+                el.textContent = out;
+
+                if (progress >= len) {
+                    el.textContent = finalText;
+                    clearInterval(el.__revealTimer);
+                    el.__revealTimer = null;
+
+                    // 이펙트가 완전히 끝난 후 실행할 동작이 있다면 실행 (초기화용)
+                    if (callback) callback();
+                }
+            }, 1000 / fps);
+        }
+
+        // --- [5. 한국어 조사 및 텍스트 팩토리 함수] ---
+        function 을를(word) {
+            if (!word) return "";
+            const lastChar = word.charCodeAt(word.length - 1);
+            if (lastChar < 0xAC00 || lastChar > 0xD7A3) return word + "를"; // 괄호 누락 수정
+            const hasBatchim = (lastChar - 0xAC00) % 28 !== 0;
+            return word + (hasBatchim ? "을" : "를");
+        }
+
+        function 이가(word) {
+            if (!word) return "";
+            const lastChar = word.charCodeAt(word.length - 1);
+            if (lastChar < 0xAC00 || lastChar > 0xD7A3) return word + "가"; // 괄호 누락 수정
+            const hasBatchim = (lastChar - 0xAC00) % 28 !== 0;
+            return word + (hasBatchim ? "이" : "가");
+        }
+
+        // --- [6. 메인 클릭 이벤트 핸들러] ---
+        const textEl = document.getElementById("maintext");
+
+        textEl.addEventListener("click", async () => {
+            await unlockHowlerFromGesture();
+
+            if (!gotPres && clickable) {
+                if (__audioUnlocked) {
+                    플레이어지령오디오();
+                }
+                revealText(textEl, '', String(generate()), { revealSpeed: 0.01 });
+            } else if (clickable) {
+                if (__audioUnlocked) {
+                    플레이어지령오디오();
+                }
+                // 에러 유발 변수(targetText) 제거 및 인자 순서 정정 (현재텍스트 -> _CLEAR._)
+                // 스크램블 처리가 완료된(clickable=true가 된) 2초 후에 클랭크 소리와 함께 초기화되도록 콜백 추가
+                revealText(textEl, "_CLEAR._", "_CLEAR._", { revealSpeed: 0.01 }, () => {
+                    setTimeout(() => {
+                        clankSound.stop();
+                        clankSound.play();
+
+                        textEl.textContent = "— 다음 지령이 도착했습니다. —";
+                        clickable = true;
+                        gotPres = false;
+                    }, 1100);
+                });
+            }
+        });
+    </script>
+    <script id="지령제작기" src="./context.js"></script>
+</body>
+
+</html>

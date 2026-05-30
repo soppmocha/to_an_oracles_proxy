@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<!-- saved from url=(0032)https://prescript.neocities.org/ -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    <title>Prescript</title>
+    <meta name="description" content="Follow the Will of the City.">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/x-icon" href="https://prescript.neocities.org/25px-Mark_of_the_Prescript_webp.png">
+    <link href="./Prescript_files/style.css" rel="stylesheet">
+</head>
+
+<body>
+
+        <main>
+
+            <p style="text-align: center;"><img src="./Prescript_files/The_Index_Logo.png"></p>
+
+            <form id="nameForm">
+                <label for="name">Who are you?</label><br>
+                <input type="text" id="name" name="name"><br>
+                <input type="submit" id="registerName" value="REGISTER">
+            </form>
+
+            <div id="prescriptMessenger">
+                <div id="paperSlip">
+                     <p></p>
+                </div>
+                
+                <button id="prescriptComplete" onclick="clearPrescript()">Prescript Complete</button>
+                <button id="drawPrescript" onclick="newPrescriptDisplay()">Draw Prescript</button>
+            </div>
+
+            <hr>
+
+            <footer>
+                <p><strong>Remember:</strong> You must complete your prescripts before drawing a new one.</p>
+                <p style="text-align: center;"><button id="changeName" onclick="changeName()">Click to change your name.</button></p>
+                <p style="text-align: right;">You may submit suggestions and bugs <a href="https://willoftheprescript.straw.page/" target="_blank">here.</a></p>
+            </footer>
+
+            <audio id="beeper">
+                <source src="https://file.garden/ZR2QLXa-dUbt6tLS/index_message_1.wav" autoplay="" type="audio/wav">
+            </audio>
+            <audio id="finish">
+                <source src="https://file.garden/ZR2QLXa-dUbt6tLS/index_message_2.wav" autoplay="" type="audio/wav">
+            </audio>
+        </main>
+
+
+<script src="./Prescript_files/prescripts.js.다운로드"></script>
+<script>
+    checkIfFirstTime();
+</script></body></html>
